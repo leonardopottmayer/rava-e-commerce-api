@@ -1,4 +1,4 @@
-require("express-async-errors");
+import "express-async-errors";
 import "dotenv/config";
 import app from "./app";
 
