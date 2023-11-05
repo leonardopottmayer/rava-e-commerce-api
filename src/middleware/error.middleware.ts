@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { AppException } from "../models/exception/app.exception";
+import { ResponseWriter } from "../utils/response-writer";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { getDbErrorMessage } from "../utils/db-error-message-getter";
 
 type ErrorResponseData = {
   message: string;
@@ -12,13 +15,18 @@ export const errorMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (error instanceof AppException) {
-    return res.status(error.data.statusCode).json(error.data);
+  if (error instanceof PrismaClientKnownRequestError) {
+    const errorMessage = getDbErrorMessage(error.code);
+
+    return ResponseWriter.error(res, errorMessage, "", 400);
+  } else if (error instanceof AppException) {
+    return ResponseWriter.error(
+      res,
+      error.data.message,
+      "",
+      error.data.statusCode
+    );
   } else {
-    return res.status(500).json({ nessage: "No auth" });
+    return ResponseWriter.error(res, error.message, "", 500);
   }
 };
-
-const getErrorMessageAndStatusCode = (
-  error: AppException
-): ErrorResponseData | any => {};

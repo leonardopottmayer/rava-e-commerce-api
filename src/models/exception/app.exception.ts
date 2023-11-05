@@ -1,6 +1,5 @@
 export type AppExceptionData = {
   message: string;
-  timestamp: number;
   statusCode: number;
 };
 

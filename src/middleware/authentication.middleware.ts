@@ -15,7 +15,6 @@ export const ensureAuthentication = async (
   if (!req.headers.authorization) {
     throw new AppException({
       message: "You are not authenticated",
-      timestamp: new Date().getTime(),
       statusCode: 401,
     });
   }
@@ -26,7 +25,6 @@ export const ensureAuthentication = async (
   if (!authHeaderToken) {
     throw new AppException({
       message: "You are not authenticated",
-      timestamp: new Date().getTime(),
       statusCode: 401,
     });
   }
@@ -38,7 +36,6 @@ export const ensureAuthentication = async (
   } catch (error: any) {
     throw new AppException({
       message: "You are not authenticated",
-      timestamp: new Date().getTime(),
       statusCode: 401,
     });
   }
@@ -53,7 +50,6 @@ export const ensureAuthentication = async (
   if (!requestUser) {
     throw new AppException({
       message: "Invalid user id in token",
-      timestamp: new Date().getTime(),
       statusCode: 401,
     });
   }
