@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AppException } from "../models/exception/app.exception";
 import jwt from "jsonwebtoken";
-import jwtDecode from "jwt-decode";
+import * as jwtDecode from "jwt-decode";
 import { UserService } from "../modules/user/user.service";
 import { JwtTokenPayload } from "../models/jwt/jwt-token-payload.type";
 

@@ -71,6 +71,7 @@ export class AuthService {
         name: foundUser.name,
         username: foundUser.username,
         email: foundUser.email,
+        role: foundUser.role,
         createdAt: foundUser.createdAt,
         updatedAt: foundUser.updatedAt,
       };
@@ -126,6 +127,7 @@ export class AuthService {
         username: registerDataDto.username,
         email: registerDataDto.email,
         password: hashedPassword,
+        role: "Default",
       },
     });
 

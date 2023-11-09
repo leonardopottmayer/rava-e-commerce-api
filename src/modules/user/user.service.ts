@@ -7,7 +7,7 @@ export class UserService {
     this.db = new PrismaClient();
   }
 
-  async getUserById(id: string): Promise<User | null> {
+  async getUserById(id: number): Promise<User | null> {
     return await this.db.user.findUnique({ where: { id } });
   }
 }

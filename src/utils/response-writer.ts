@@ -2,6 +2,13 @@ import { IErrorApiResponse } from "../models/response/error-api-response.interfa
 import { ISuccessApiResponse } from "../models/response/success-api-response.interface";
 import { Response } from "express";
 
+export enum ResponseWriterMessage {
+  Created = "Successfully created.",
+  Updated = "Successfully updated.",
+  Deleted = "Successfully deleted",
+  Queried = "Successfully queried.",
+}
+
 export class ResponseWriter {
   constructor() {}
 
