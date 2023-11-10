@@ -2,6 +2,7 @@ import { PrismaClient, Product, User } from "@prisma/client";
 import Joi from "joi";
 import { AppException } from "../../models/exception/app.exception";
 import { CreateProductDto } from "./models/create-product.dto";
+import { UpdateProductDto } from "./models/update-product.dto";
 
 export class ProductService {
   private db: PrismaClient;
@@ -89,5 +90,99 @@ export class ProductService {
     });
 
     return deletedProduct;
+  }
+
+  async updateProduct(
+    currentUser: User,
+    productId: number,
+    updateProductDto: UpdateProductDto
+  ): Promise<Product> {
+    const dtoSchema = Joi.object({
+      name: Joi.string().min(2).max(40).required(),
+      description: Joi.string().max(400),
+      price: Joi.number().min(0.01).required(),
+      isVisible: Joi.bool().required(),
+      productCategoryId: Joi.number().min(1).required(),
+    });
+
+    const { error } = dtoSchema.validate(updateProductDto);
+
+    if (error) {
+      throw new AppException({
+        message: error.message,
+        statusCode: 400,
+      });
+    }
+
+    const fetchedProduct = await this.db.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!fetchedProduct) {
+      throw new AppException({
+        message: "Product not found.",
+        statusCode: 404,
+      });
+    }
+
+    const fetchedProductCategory = await this.db.productCategory.findUnique({
+      where: { id: updateProductDto.productCategoryId },
+    });
+
+    if (!fetchedProductCategory) {
+      throw new AppException({
+        message: "Product category not found.",
+        statusCode: 404,
+      });
+    }
+
+    const updatedProduct = await this.db.product.update({
+      data: {
+        name: updateProductDto.name,
+        description: updateProductDto.description,
+        price: updateProductDto.price,
+        isVisible: updateProductDto.isVisible,
+        productCategoryId: updateProductDto.productCategoryId,
+        updatedBy: currentUser.id,
+        updatedAt: new Date(),
+      },
+      where: {
+        id: productId,
+      },
+    });
+
+    return updatedProduct;
+  }
+
+  async getProductById(id: number): Promise<Product> {
+    const idSchema = Joi.number().min(1).required();
+
+    const { error } = idSchema.validate(id);
+
+    if (error) {
+      throw new AppException({
+        message: error.message,
+        statusCode: 400,
+      });
+    }
+
+    const product = await this.db.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      throw new AppException({
+        message: "Product not found.",
+        statusCode: 404,
+      });
+    }
+
+    return product;
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    const products = await this.db.product.findMany();
+
+    return products;
   }
 }
