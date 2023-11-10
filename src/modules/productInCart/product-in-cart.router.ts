@@ -41,7 +41,7 @@ productInCartRouter.get(
 productInCartRouter.get(
   "/",
   ensureAuthentication,
-  ensureRole([UserRole.Admin]),
+  ensureRole([UserRole.Default]),
   async (req, res) => {
     return new ProductInCartController().getAllProductsInCart(req, res);
   }
