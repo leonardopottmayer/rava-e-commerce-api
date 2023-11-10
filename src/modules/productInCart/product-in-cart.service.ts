@@ -179,6 +179,16 @@ export class ProductInCartService {
 
     const product = await this.db.productInCart.findUnique({
       where: { id },
+      include: {
+        product: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            price: true,
+          },
+        },
+      },
     });
 
     if (!product) {
