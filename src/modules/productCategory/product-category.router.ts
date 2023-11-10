@@ -14,5 +14,13 @@ productCategoryRouter.post(
     return new ProductCategoryController().createProductCategory(req, res);
   }
 );
+productCategoryRouter.delete(
+  "/:id",
+  ensureAuthentication,
+  ensureRole([UserRole.Admin]),
+  async (req, res) => {
+    return new ProductCategoryController().deleteProductCategory(req, res);
+  }
+);
 
 export default productCategoryRouter;

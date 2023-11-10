@@ -5,7 +5,7 @@ import { Response } from "express";
 export enum ResponseWriterMessage {
   Created = "Successfully created.",
   Updated = "Successfully updated.",
-  Deleted = "Successfully deleted",
+  Deleted = "Successfully deleted.",
   Queried = "Successfully queried.",
 }
 

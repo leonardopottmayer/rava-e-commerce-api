@@ -25,6 +25,20 @@ export class ProductCategoryController {
       res,
       ResponseWriterMessage.Created,
       productCategory,
+      201
+    );
+  }
+
+  async deleteProductCategory(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const deletedProductCategory =
+      await this.productCategoryService.deleteProductCategory(+id);
+
+    return ResponseWriter.success(
+      res,
+      ResponseWriterMessage.Deleted,
+      deletedProductCategory,
       200
     );
   }

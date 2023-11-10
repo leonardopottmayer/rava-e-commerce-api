@@ -41,4 +41,36 @@ export class ProductCategoryService {
 
     return createdProductCategory;
   }
+
+  async deleteProductCategory(id: number): Promise<ProductCategory> {
+    const idSchema = Joi.number().min(1).required();
+
+    const { error } = idSchema.validate(id);
+
+    if (error) {
+      throw new AppException({
+        message: error.message,
+        statusCode: 400,
+      });
+    }
+
+    const productCategoryToDelete = await this.db.productCategory.findUnique({
+      where: { id },
+    });
+
+    if (!productCategoryToDelete) {
+      throw new AppException({
+        message: "Product category not found.",
+        statusCode: 404,
+      });
+    }
+
+    const deletedProductCategory = await this.db.productCategory.delete({
+      where: {
+        id,
+      },
+    });
+
+    return deletedProductCategory;
+  }
 }
