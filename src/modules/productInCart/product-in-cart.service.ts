@@ -201,6 +201,16 @@ export class ProductInCartService {
   async getAllProductsInCart(currentUser: User): Promise<ProductInCart[]> {
     const productsInCart = await this.db.productInCart.findMany({
       where: { userId: currentUser.id },
+      include: {
+        product: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            price: true,
+          },
+        },
+      },
     });
 
     return productsInCart;
